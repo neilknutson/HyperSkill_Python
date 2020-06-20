@@ -1,0 +1,71 @@
+import random
+import string
+
+word_list = ['python', 'java', 'kotlin', 'javascript']
+word = random.choice(word_list)
+word_length = len(word)
+word_hint = '-' * word_length
+attempts = 8
+display_count = attempts
+guessed_letters = list()
+start = ''
+
+print('''H A N G M A N''')
+
+while start != 'play':
+    start = input('Type "play" to play the game, "exit" to quit:')
+    if start != 'play' and start != 'exit':
+        continue
+    if start == 'exit':
+        break
+
+print('''
+''' + word_hint)
+
+while start == 'play':
+    letter = input('Input a letter:')
+    if len(letter) > 1:
+        print('You should input a single letter')
+        print("\n")
+        print(word_hint)
+        continue
+    if letter not in string.ascii_lowercase:
+        print('It is not an ASCII lowercase letter')
+        print("\n")
+        print(word_hint)
+        continue
+    if letter in guessed_letters:
+        print('You already typed this letter')
+        print("\n")
+        print(word_hint)
+        continue
+    else:
+        guessed_letters.extend(letter)
+    if letter in set(word_hint):
+        display_count -= 1
+        print('No improvements')
+        if display_count == 0:
+            print('You are hanged!')
+            break
+    if letter not in set(word):
+        display_count -= 1
+        print('No such letter in the word')
+        if display_count == 0:
+            print('You are hanged!')
+            break
+        print("\n")
+        print(word_hint)
+    else:
+        loop = 0
+        for _i in range(word_length):
+            if word[loop] == letter:
+                word_hint = word_hint[:loop] + letter + word_hint[(loop+1):]
+            loop += 1
+        if word_hint == word:
+            print(word_hint)
+            print('You guessed the word!')
+            print('You survived!')
+            break
+        print("\n")
+        if display_count > 0:
+            print(word_hint)
